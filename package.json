@@ -1,0 +1,28 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "George Washington University Project",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nguyendviet/Bamazon.git"
+  },
+  "keywords": [
+    "bamazon",
+    "gwu"
+  ],
+  "author": "Viet Nguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nguyendviet/Bamazon/issues"
+  },
+  "homepage": "https://github.com/nguyendviet/Bamazon#readme",
+  "dependencies": {
+    "console.table": "^0.9.1",
+    "inquirer": "^3.3.0",
+    "mysql": "^2.15.0"
+  }
+}

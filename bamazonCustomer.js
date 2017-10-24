@@ -37,26 +37,139 @@ Make sure you use the normal GitHub. Because this is a CLI App, there will be no
 
 // 5. Then create a Node application called `bamazonCustomer.js`. Running this application will first display all of the items available for sale. Include the ids, names, and prices of products for sale.
 
+var mysql = require('mysql');
+var inquirer = require('inquirer');
+require('console.table');
 
+var connection = mysql.createConnection({
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: 'root',
+  database: 'bamazon' // insert database name
+});
+
+connection.connect((err) => {
+  if (err) throw err;
+  showItems();
+});
+
+function Item(id, name, price) {
+  this.ID = id;
+  this.Name = name;
+  this.Price = '$' + price;
+}
+
+function showItems() {
+  connection.query('SELECT * FROM products', (err, res) => {
+    if (err) throw err;
+
+    var table = [];
+
+    // run throught table products in database
+    for (var i = 0; i < res.length; i++) {
+      table.push(new Item(res[i].item_id, res[i].product_name, res[i].price)); // add new item to table array
+    }
+
+    console.table(table); // print out the table as table - tablinception
+
+    start();
+  });
+}
 
 /* 6. The app should then prompt users with two messages.
 
    * The first should ask them the ID of the product they would like to buy.
    * The second message should ask how many units of the product they would like to buy.
+*/
+
+function start() {
+  inquirer
+  .prompt([
+    {
+      name: 'id',
+      type: 'input',
+      message: 'What is the ID of the product you would like to buy?',
+    },
+    {
+      name: 'quantity',
+      type: 'input',
+      message: 'How many units you would like to buy?',
+      // check if user orders nothing
+      validate: (val) => {
+        if (val < 1) {
+          return false;
+        }
+        else {
+          return true;
+        }
+      }
+    }
+  ])
+  .then((res) => {
+     checkQuantity(res.id, res.quantity);
+  });
+}
+
+/*
 
 7. Once the customer has placed the order, your application should check if your store has enough of the product to meet the customer's request.
 
    * If not, the app should log a phrase like `Insufficient quantity!`, and then prevent the order from going through.
+*/
 
+function checkQuantity(id, orderQuantity) {
+  connection.query('SELECT `product_name`, `stock_quantity` FROM products WHERE item_id = "' + id + '"', (err, res) => {
+    if (err) throw err;
+    var product = res[0].product_name;
+    var stockQuantity = res[0].stock_quantity;
+
+    if (stockQuantity < orderQuantity) {
+      console.log('Sorry. We do not have enough in stock. Please reduce your quantity.');
+      start();
+    }
+    else {
+      console.log('Your order: ' + product + ' x ' + orderQuantity + ' has been placed!');
+      placeOrder(id, stockQuantity, orderQuantity);
+    }
+  });
+}
+
+/*
 8. However, if your store _does_ have enough of the product, you should fulfill the customer's order.
    * This means updating the SQL database to reflect the remaining quantity.
    * Once the update goes through, show the customer the total cost of their purchase.
+*/
 
-- - -
+function placeOrder(id, stockQuantity, orderQuantity) {
+  stockQuantity -= orderQuantity;
+  connection.query('UPDATE products SET ? WHERE ?',
+    [
+      {
+        stock_quantity: stockQuantity
+      },
+      {
+        item_id: id
+      }
+    ],
+  (err) => {
+    if (err) throw err;
+    totalCost(id, orderQuantity);
+  });
+}
 
-* If this activity took you between 8-10 hours, then you've put enough time into this assignment. Feel free to stop here -- unless you want to take on the next challenge.
+function totalCost(id, quantity) {
+  connection.query('SELECT price FROM products WHERE item_id = "' + id + '"', (err, res) => {
+    if (err) throw err;
 
-- - -
+    var price = res[0].price;
+    var total = price * quantity;
+
+    console.log('Congratulations! Your order is on the way!\nPrice: $' + price + '\nTotal: $' + total); // ISSUE: trailing numbers in total price of order of 5 for item has .99 price tag
+  });
+}
+
+/*
 
 ### Challenge #2: Manager View (Next Level)
 
