@@ -9,6 +9,7 @@ CREATE TABLE products (
     department_name VARCHAR(50) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     stock_quantity INT(10),
+    product_sales DECIMAL(10,2) NULL,
     PRIMARY KEY (item_id)
 );
 
@@ -25,3 +26,10 @@ VALUES
     ('Nintendo', 'Video Games', 199.99, 1),
     ('Leonardo da Vinci', 'Books', 20.99, 20),
     ('T Rex Costume', 'Clothing', 49.99, 2218);
+
+CREATE TABLE departments (
+	department_id INT(11) AUTO_INCREMENT NOT NULL,
+    department_name VARCHAR(50) NOT NULL,
+    over_head_costs DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (department_id)
+);

@@ -120,6 +120,34 @@ function totalCost(id, quantity) {
 
     console.log('Score! Your order has shipped!\n========================================\nPrice: $' + price + '\n--------------------\nTotal: $' + total.toFixed(2));
 
+    addSale(id, total);
+  });
+}
+
+// update product sales
+function addSale(id, newSale) {
+  connection.query('SELECT product_sales FROM products WHERE item_id = "' + id + '"', (err, res) => {
+    if (err) throw err;
+
+    var currentSale = res[0].product_sales;
+    var revenue = currentSale + newSale;
+
+    updateRevenue(id, revenue);
+  });
+}
+
+function updateRevenue(id, revenue) {
+  connection.query('UPDATE products SET ? WHERE ?',
+    [
+      {
+        product_sales: revenue
+      },
+      {
+        item_id: id
+      }
+    ],
+  (err) => {
+    if (err) throw err;
     process.exit();
   });
 }
