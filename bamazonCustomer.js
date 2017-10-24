@@ -31,6 +31,8 @@ function showItems() {
 
     var table = [];
 
+    console.log('\n========================================\nList of all the items available for sale:\n');
+
     // run throught table products in database
     for (var i = 0; i < res.length; i++) {
       table.push(new Item(res[i].item_id, res[i].product_name, res[i].price)); // add new item to table array

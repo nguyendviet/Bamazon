@@ -46,7 +46,7 @@ function managerView() {
         viewProducts();
       break;
       case 'View Low Inventory':
-        console.log('View low inventory');
+        lowInventory();
       break;
       case 'Add to Inventory':
         console.log('Add to inventory');
@@ -83,6 +83,21 @@ function viewProducts() {
 }
 
 //   * If a manager selects `View Low Inventory`, then it should list all items with an inventory count lower than five.
+function lowInventory() {
+  connection.query('SELECT * FROM products WHERE stock_quantity < 5', (err, res) => {
+    if (err) throw err;
+
+    var table = [];
+    console.log('\n========================================\nList of items with low inventory (< 5):\n');
+    
+    // run throught table products in database
+    for (var i = 0; i < res.length; i++) {
+      table.push(new Item(res[i].item_id, res[i].product_name, res[i].price, res[i].stock_quantity)); // add new item to table array
+    }
+
+    console.table(table); // print out the table as table - tablinception
+  });
+}
 
 //   * If a manager selects `Add to Inventory`, your app should display a prompt that will let the manager "add more" of any item currently in the store.
 

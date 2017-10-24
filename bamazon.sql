@@ -21,7 +21,7 @@ VALUES
     ('Kindle Paperwhite', 'Electronics', 89.99, 51061),
     ('Echo Dot', 'Electronics', 49.99, 56744),
     ('Mini Instant Film', 'Camera and Photo', 12.49, 4159),
-    ('Super Mario', 'Video Games', 59.99, 10),
-    ('Nintendo', 'Video Games', 199.99, 10),
+    ('Super Mario', 'Video Games', 59.99, 1),
+    ('Nintendo', 'Video Games', 199.99, 1),
     ('Leonardo da Vinci', 'Books', 20.99, 20),
     ('T Rex Costume', 'Clothing', 49.99, 2218);
