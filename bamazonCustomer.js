@@ -116,6 +116,6 @@ function totalCost(id, quantity) {
     var price = res[0].price;
     var total = price * quantity;
 
-    console.log('Congratulations! Your order is on the way!\nPrice: $' + price + '\nTotal: $' + total); // ISSUE: trailing numbers in total price of order of 5 for item has .99 price tag
+    console.log('Congratulations! Your order is on the way!\nPrice: $' + price + '\nTotal: $' + total.toFixed(2));
   });
 }
