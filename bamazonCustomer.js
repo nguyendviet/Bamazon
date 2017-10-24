@@ -38,12 +38,12 @@ function showItems() {
 
     console.table(table); // print out the table as table - tablinception
 
-    start();
+    customerView();
   });
 }
 
 // ask user
-function start() {
+function customerView() {
   inquirer
   .prompt([
     {
@@ -80,7 +80,7 @@ function checkQuantity(id, orderQuantity) {
 
     if (stockQuantity < orderQuantity) {
       console.log('Sorry. We do not have enough in stock. Please reduce your quantity.');
-      start();
+      customerView();
     }
     else {
       console.log('Your order: ' + product + ' x ' + orderQuantity + ' has been placed!');
