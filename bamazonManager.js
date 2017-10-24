@@ -49,7 +49,7 @@ function managerView() {
         lowInventory();
       break;
       case 'Add to Inventory':
-        console.log('Add to inventory');
+        addMore();
       break;
       case 'Add New Product':
         console.log('Add new product');
@@ -58,7 +58,7 @@ function managerView() {
   });
 }
 
-//   * If a manager selects `View Products for Sale`, the app should list every available item: the item IDs, names, prices, and quantities.
+// list every available item
 // constructor for table
 function Item(id, name, price, quantity) {
   this.ID = id;
@@ -82,7 +82,7 @@ function viewProducts() {
   });
 }
 
-//   * If a manager selects `View Low Inventory`, then it should list all items with an inventory count lower than five.
+// list all items with inventory count < 5
 function lowInventory() {
   connection.query('SELECT * FROM products WHERE stock_quantity < 5', (err, res) => {
     if (err) throw err;
@@ -99,6 +99,70 @@ function lowInventory() {
   });
 }
 
-//   * If a manager selects `Add to Inventory`, your app should display a prompt that will let the manager "add more" of any item currently in the store.
+// add more of any item currently in the store
+function addMore() {
+  connection.query('SELECT * FROM products', (err, res) => {
+    if (err) throw err;
+
+    var table = [];
+
+    console.log('\n========================================\nList of all the items currently in the store:\n');
+
+    // run throught table products in database
+    for (var i = 0; i < res.length; i++) {
+      table.push(new Item(res[i].item_id, res[i].product_name, res[i].price, res[i].stock_quantity)); // add new item to table array
+    }
+
+    console.table(table); // print out the table as table - tablinception
+
+    chooseItem();
+  });
+}
+
+// pick item to add
+function chooseItem() {
+  inquirer
+  .prompt([
+    {
+      name: 'id',
+      type: 'input',
+      message: 'Enter product ID to increase stock:',
+    },
+    {
+      name: 'quantity',
+      type: 'input',
+      message: 'Set number of units:',
+      // check if user orders nothing
+      validate: (val) => {
+        if (val < 1) {
+          return false;
+        }
+        else {
+          return true;
+        }
+      }
+    }
+  ])
+  .then((res) => {
+     addItem(res.id, res.quantity);
+  });
+}
+
+function addItem(id, quantity) {
+  // update quantity in stock
+  connection.query('UPDATE products SET ? WHERE ?',
+  [
+    {
+      stock_quantity: quantity
+    },
+    {
+      item_id: id
+    }
+  ],
+  (err) => {
+    if (err) throw err;
+    console.log('Inventory has been successfully updated!');
+  });
+}
 
 //   * If a manager selects `Add New Product`, it should allow the manager to add a completely new product to the store.
