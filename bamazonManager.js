@@ -17,18 +17,6 @@ connection.connect((err) => {
   managerView();
 });
 
-// * Create a new Node application called `bamazonManager.js`. Running this application will:
-
-//   * List a set of menu options:
-
-//     * View Products for Sale
-    
-//     * View Low Inventory
-    
-//     * Add to Inventory
-    
-//     * Add New Product
-
 function managerView() {
   var inquirer = require('inquirer'); // require npm inquirer
   inquirer
@@ -49,10 +37,10 @@ function managerView() {
         lowInventory();
       break;
       case 'Add to Inventory':
-        addMore();
+        addInventory();
       break;
       case 'Add New Product':
-        console.log('Add new product');
+        addProduct();
       break;
     }
   });
@@ -72,6 +60,7 @@ function viewProducts() {
     if (err) throw err;
 
     var table = [];
+    console.log('\n========================================\nList of all available items:\n');
 
     // run throught table products in database
     for (var i = 0; i < res.length; i++) {
@@ -79,6 +68,8 @@ function viewProducts() {
     }
 
     console.table(table); // print out the table as table - tablinception
+
+    process.exit();
   });
 }
 
@@ -96,11 +87,13 @@ function lowInventory() {
     }
 
     console.table(table); // print out the table as table - tablinception
+
+    process.exit();
   });
 }
 
 // add more of any item currently in the store
-function addMore() {
+function addInventory() {
   connection.query('SELECT * FROM products', (err, res) => {
     if (err) throw err;
 
@@ -162,7 +155,60 @@ function addItem(id, quantity) {
   (err) => {
     if (err) throw err;
     console.log('Inventory has been successfully updated!');
+    process.exit();
   });
 }
 
-//   * If a manager selects `Add New Product`, it should allow the manager to add a completely new product to the store.
+// add a new product to the store
+function addProduct() {
+  inquirer
+  .prompt([
+    {
+      name: 'name',
+      type: 'input',
+      message: 'Product name:'
+    },
+    {
+      name: 'department',
+      type: 'input',
+      message: 'Department name:'
+    },
+    {
+      name: 'price',
+      type: 'input',
+      message: 'Price:',
+      validate: (val) => {
+        if (isNaN(val) === false) {
+          return true;
+        }
+        return false;
+      }
+    },
+    {
+      name: 'quantity',
+      type: 'input',
+      message: 'Quantity:',
+      validate: (val) => {
+        if (isNaN(val) === false) {
+          return true;
+        }
+        return false;
+      }
+    }
+  ])
+  .then(function(product) {
+    connection.query('INSERT INTO products SET ?',
+      {
+        product_name: product.name,
+        department_name: product.department,
+        price: product.price,
+        stock_quantity: product.quantity
+      },
+      function(err) {
+        if (err) throw err;
+        console.log('The new product has been successfully added to the stock!');
+        process.exit();
+      }
+    );
+  });
+}

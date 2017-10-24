@@ -81,11 +81,11 @@ function checkQuantity(id, orderQuantity) {
     var stockQuantity = res[0].stock_quantity;
 
     if (stockQuantity < orderQuantity) {
-      console.log('Sorry. We do not have enough in stock. Please reduce your quantity.');
+      console.log('\nSorry. We currently do not have enough in stock.\n');
       customerView();
     }
     else {
-      console.log('Your order: ' + product + ' x ' + orderQuantity + ' has been placed!');
+      console.log('\n========================================\nYour order summary:\nItem: ' + product + '\nQuantity: ' + orderQuantity + '\nYour order has been placed. We are processing it...');
       placeOrder(id, stockQuantity, orderQuantity);
     }
   });
@@ -118,6 +118,8 @@ function totalCost(id, quantity) {
     var price = res[0].price;
     var total = price * quantity;
 
-    console.log('Congratulations! Your order is on the way!\nPrice: $' + price + '\nTotal: $' + total.toFixed(2));
+    console.log('Score! Your order has shipped!\n========================================\nPrice: $' + price + '\n--------------------\nTotal: $' + total.toFixed(2));
+
+    process.exit();
   });
 }
