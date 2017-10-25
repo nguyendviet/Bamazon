@@ -27,9 +27,28 @@ VALUES
     ('Leonardo da Vinci', 'Books', 20.99, 20),
     ('T Rex Costume', 'Clothing', 49.99, 2218);
 
-CREATE TABLE departments (
-	department_id INT(11) AUTO_INCREMENT NOT NULL,
-    department_name VARCHAR(50) NOT NULL,
-    over_head_costs DECIMAL(10,2) NOT NULL,
-    PRIMARY KEY (department_id)
+/* CREATE TABLE departments (
+	department_id INT(11) NULL,
+    over_head_costs DECIMAL(10,2) NULL
 );
+
+INSERT INTO departments SELECT department_name FROM products GROUP BY department_name; */
+
+/* CREATE TABLE departments (
+    item_id INT(11) AUTO_INCREMENT NOT NULL,
+    SELECT products.department_name
+    FROM products GROUP BY department_name,
+    over_head_costs DECIMAL(10,2) NULL,
+); */
+
+CREATE VIEW departments AS
+SELECT products.department_name
+FROM products GROUP BY department_name;
+
+/* CREATE TABLE departments (
+    item_id INT(11) AUTO_INCREMENT NOT NULL,
+    department_name AS CREATE VIEW departments AS
+SELECT products.department_name
+FROM products GROUP BY department_name,
+    over_head_costs DECIMAL(10,2) NULL,
+); */

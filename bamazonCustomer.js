@@ -136,6 +136,7 @@ function addSale(id, newSale) {
   });
 }
 
+// update database
 function updateRevenue(id, revenue) {
   connection.query('UPDATE products SET ? WHERE ?',
     [

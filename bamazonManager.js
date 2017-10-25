@@ -18,7 +18,6 @@ connection.connect((err) => {
 });
 
 function managerView() {
-  var inquirer = require('inquirer'); // require npm inquirer
   inquirer
   .prompt([
     {
