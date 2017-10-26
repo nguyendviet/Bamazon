@@ -5,10 +5,10 @@ USE bamazon;
 
 CREATE TABLE products (
 	item_id INT(11) AUTO_INCREMENT NOT NULL,
-    product_name VARCHAR(50) NOT NULL,
-    department_name VARCHAR(50) NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
-    stock_quantity INT(10),
+    product_name VARCHAR(50) NULL,
+    department_name VARCHAR(50) NULL,
+    price DECIMAL(10,2) NULL,
+    stock_quantity INT(10) NULL,
     product_sales DECIMAL(10,2) NULL,
     PRIMARY KEY (item_id)
 );
@@ -27,28 +27,19 @@ VALUES
     ('Leonardo da Vinci', 'Books', 20.99, 20),
     ('T Rex Costume', 'Clothing', 49.99, 2218);
 
-/* CREATE TABLE departments (
-	department_id INT(11) NULL,
-    over_head_costs DECIMAL(10,2) NULL
+CREATE TABLE departments (
+	department_id INT(11) AUTO_INCREMENT NOT NULL,
+    department_name VARCHAR(50) NULL,
+    over_head_costs DECIMAL(10,2) NULL,
+    PRIMARY KEY (department_id)
 );
 
-INSERT INTO departments SELECT department_name FROM products GROUP BY department_name; */
-
-/* CREATE TABLE departments (
-    item_id INT(11) AUTO_INCREMENT NOT NULL,
-    SELECT products.department_name
-    FROM products GROUP BY department_name,
-    over_head_costs DECIMAL(10,2) NULL,
-); */
-
-CREATE VIEW departments AS
-SELECT products.department_name
-FROM products GROUP BY department_name;
-
-/* CREATE TABLE departments (
-    item_id INT(11) AUTO_INCREMENT NOT NULL,
-    department_name AS CREATE VIEW departments AS
-SELECT products.department_name
-FROM products GROUP BY department_name,
-    over_head_costs DECIMAL(10,2) NULL,
-); */
+INSERT INTO departments
+    (department_name, over_head_costs)
+VALUES
+    ('Toys and Games', 2000),
+    ('Electronics', 8000),
+    ('Camera and Photo', 5000),
+    ('Video Games', 4000),
+    ('Books', 1000),
+    ('Clothing', 6000);

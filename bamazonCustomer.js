@@ -26,7 +26,7 @@ function Item(id, name, price) {
 
 // show list of available items
 function showItems() {
-  connection.query('SELECT * FROM products', (err, res) => {
+  connection.query('SELECT * FROM products WHERE product_name IS NOT NULL', (err, res) => {
     if (err) throw err;
 
     var table = [];
@@ -149,6 +149,7 @@ function updateRevenue(id, revenue) {
     ],
   (err) => {
     if (err) throw err;
+    connection.end();
     process.exit();
   });
 }

@@ -17,12 +17,6 @@ connection.connect((err) => {
     supervisorView();
 });
 
-// 4. Create another Node app called `bamazonSupervisor.js`. Running this application will list a set of menu options:
-
-//    * View Product Sales by Department
-   
-//    * Create New Department
-
 function supervisorView() {
     inquirer
     .prompt([
@@ -39,19 +33,14 @@ function supervisorView() {
           viewSale();
         break;
         case 'Create New Department':
-          console.log('Create New Department');
+          newDepartment();
         break;
       }
     });
 }
 
-// 5. When a supervisor selects `View Product Sales by Department`, the app should display a summarized table in their terminal/bash window. Use the table below as a guide.
-
-// | department_id | department_name | over_head_costs | product_sales | total_profit |
-// | ------------- | --------------- | --------------- | ------------- | ------------ |
-// | 01            | Electronics     | 10000           | 20000         | 10000        |
-// | 02            | Clothing        | 60000           | 100000        | 40000        |
-
+// display a summarized table
+// constructor for table
 function Item(id, name, cost, sales, profit) {
     this.Department_ID = id;
     this.Department_Name = name;
@@ -61,31 +50,64 @@ function Item(id, name, cost, sales, profit) {
 }
 
 function viewSale() {
-    connection.query('SELECT departments.department_id, departments.department_name, departments.over_head_costs, products.department_name FROM departments LEFT JOIN products ON departments.department_name = products.dfepartment_name', (err, res) => {
-        if (err) throw err;
+  var query = 'SELECT departments.department_id, departments.department_name, departments.over_head_costs, '; // columns from table departments
+  query += 'products.department_name, SUM(products.product_sales) AS product_sales, '; // columns from table products
+  query += 'product_sales - departments.over_head_costs AS total_profit '; // create column total_profit
+  query += 'FROM departments LEFT JOIN products ON departments.department_name = products.department_name '; // join 2 tables
+  query += 'GROUP BY departments.department_name ORDER BY departments.department_id ASC'; // group result
+  
+  connection.query(query, (err, res) => {
+      if (err) throw err;
 
-        console.log(res);
+      // console.log(res);
 
-        /* var table = [];
-        console.log('\n========================================\nList of Product Sales by Department:\n');
-    
-        // run throught table products in database
-        for (var i = 0; i < res.length; i++) {
-          table.push(new Item(res[i].item_id, res[i].product_name, res[i].price, res[i].stock_quantity)); // add new item to table array
-        }
-    
-        console.table(table); // print out the table as table - tablinception
-    
-        process.exit(); */
-    });
+      var table = [];
+
+      console.log('\n========================================\nList of Product Sales by Department:\n');
+  
+      // run throught table products in database
+      for (var i = 0; i < res.length; i++) {
+        table.push(new Item(res[i].department_id, res[i].department_name, res[i].over_head_costs, res[i].product_sales, res[i].total_profit)); // add new item to table array
+      }
+  
+      console.table(table); // print out the table as table - tablinception
+  
+      connection.end();
+      process.exit();
+  });
 }
 
-// 6. The `total_profit` column should be calculated on the fly using the difference between `over_head_costs` and `product_sales`. `total_profit` should not be stored in any database. You should use a custom alias.
+function newDepartment() {
+  inquirer
+  .prompt([
+    {
+      name: 'department',
+      type: 'input',
+      message: 'Enter name of new department:'
+    },
+    {
+      name: 'cost',
+      type: 'input',
+      message: 'New department over head costs:'
+    }
+  ])
+  .then(function(answer) {
+    var department = answer.department;
+    var cost = answer.cost;
 
-// 7. If you can't get the table to display properly after a few hours, then feel free to go back and just add `total_profit` to the `departments` table.
+    // add new department to table departments
+    connection.query('INSERT INTO departments (department_name, over_head_costs) VALUES ("' + department + '", ' + cost + ')', (err, res) => {
+      if (err) throw err;
 
-//    * Hint: You may need to look into aliases in MySQL.
+      // also add the new department to table products
+      connection.query('INSERT INTO products (department_name) VALUES ("' + department + '")', (err, res) => {
+        if (err) throw err;
 
-//    * Hint: You may need to look into GROUP BYs.
-
-//    * Hint: You may need to look into JOINS.
+        console.log('New department has been successfully added!');
+        
+        connection.end();
+        process.exit();
+      });
+    });
+  });  
+}

@@ -55,7 +55,7 @@ function Item(id, name, price, quantity) {
 }
 
 function viewProducts() {
-  connection.query('SELECT * FROM products', (err, res) => {
+  connection.query('SELECT * FROM products WHERE product_name IS NOT NULL', (err, res) => {
     if (err) throw err;
 
     var table = [];
@@ -68,6 +68,7 @@ function viewProducts() {
 
     console.table(table); // print out the table as table - tablinception
 
+    connection.end();
     process.exit();
   });
 }
@@ -87,6 +88,7 @@ function lowInventory() {
 
     console.table(table); // print out the table as table - tablinception
 
+    connection.end();
     process.exit();
   });
 }
@@ -153,7 +155,10 @@ function addItem(id, quantity) {
   ],
   (err) => {
     if (err) throw err;
+    
     console.log('Inventory has been successfully updated!');
+
+    connection.end();
     process.exit();
   });
 }
@@ -205,7 +210,10 @@ function addProduct() {
       },
       function(err) {
         if (err) throw err;
+
         console.log('The new product has been successfully added to the stock!');
+
+        connection.end();
         process.exit();
       }
     );
