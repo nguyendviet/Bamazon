@@ -52,7 +52,7 @@ function Item(id, name, cost, sales, profit) {
 function viewSale() {
   var query = 'SELECT departments.department_id, departments.department_name, departments.over_head_costs, '; // columns from table departments
   query += 'products.department_name, SUM(products.product_sales) AS product_sales, '; // columns from table products
-  query += 'product_sales - departments.over_head_costs AS total_profit '; // create column total_profit
+  query += 'SUM(product_sales - departments.over_head_costs) AS total_profit '; // create column total_profit
   query += 'FROM departments LEFT JOIN products ON departments.department_name = products.department_name '; // join 2 tables
   query += 'GROUP BY departments.department_name ORDER BY departments.department_id ASC'; // group result
   
