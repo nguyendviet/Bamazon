@@ -23,6 +23,6 @@ George Washington University Project
 
 ### Explanation in video:
 
-[GitHub](https://youtu.be/nvKzmRri8jU)
+[Viet - Bamazon](https://youtu.be/nvKzmRri8jU)
 
 
