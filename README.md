@@ -1,7 +1,7 @@
 # Bamazon
 George Washington University Project
 
-## Technologies:
+## Technologies
 * NodeJS
 * MySQL
 
@@ -25,7 +25,7 @@ George Washington University Project
 * User has options: **View product sales by department** and **Add new department**. Database will reflect changes.
 * User can buy newly added products in newly created departments.
 
-## Explanation in video:
+## Explanation in video
 
 [Viet - Bamazon](https://youtu.be/nvKzmRri8jU)
 
