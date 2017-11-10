@@ -1,6 +1,10 @@
 # Bamazon
 George Washington University Project
 
+## Technologies:
+* NodeJS
+* MySQL
+
 ## Logic
 
 ### Customer view:
