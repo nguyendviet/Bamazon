@@ -1,5 +1,4 @@
 # Bamazon
-George Washington University Project
 
 ## Technologies
 * NodeJS
@@ -28,5 +27,3 @@ George Washington University Project
 ## Explanation in video
 
 [Viet - Bamazon](https://youtu.be/nvKzmRri8jU)
-
-
